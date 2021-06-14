@@ -4,6 +4,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.InputMismatchException;
 
 
 public class InputWindow extends JFrame implements ActionListener{
@@ -14,6 +15,7 @@ public class InputWindow extends JFrame implements ActionListener{
     int items = 0;
     int i;
     int j;
+    int k;
     int maxWeight = 0;
     String tempWeights;
     String tempValues;
@@ -27,12 +29,15 @@ public class InputWindow extends JFrame implements ActionListener{
     JLabel labelMaxWeight = new JLabel("Maximum Weight:");
     JLabel labelWeight = new JLabel("Weights:");
     JLabel labelValues = new JLabel("Values:");
+    JLabel labelBag;
     JTextField itemNum = new JTextField();
     JTextField itemMaxWeight = new JTextField();
     JTextField itemWeights = new JTextField();
     JTextField itemValues = new JTextField();
     JButton button = new JButton("Apply");
     JButton solve = new JButton("Solve");
+    GridBagConstraints gbc = new GridBagConstraints();
+    ImageIcon napSack;
 
 
     // Constructor
@@ -41,6 +46,7 @@ public class InputWindow extends JFrame implements ActionListener{
         // frame design and measurement
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(400,100,800,600);
+
 
         // labels size and measurement
         labelItems.setBounds(40,40,140,30);
@@ -67,6 +73,10 @@ public class InputWindow extends JFrame implements ActionListener{
         button.addActionListener(this);
         frame.add(button);
 
+        // Image setup
+
+        panel.setLayout(new GridBagLayout());
+        gbc.fill =GridBagConstraints.HORIZONTAL;
         frame.add(panel);
         frame.setVisible(true);
     }
@@ -75,36 +85,58 @@ public class InputWindow extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == button)
         {
-            // Get user's input for size and maximum weight
-            items = Integer.parseInt(itemNum.getText());
-            maxWeight = Integer.parseInt(itemMaxWeight.getText());
-            tempWeights = itemWeights.getText();
-            tempValues = itemValues.getText();
+            try {
+                // Get user's input for size and maximum weight
+                items = Integer.parseInt(itemNum.getText());
+                maxWeight = Integer.parseInt(itemMaxWeight.getText());
+                tempWeights = itemWeights.getText();
+                tempValues = itemValues.getText();
 
-            // Array size
-            values = new int[items];
-            weights = new int[items];
+                // Array size
+                values = new int[items];
+                weights = new int[items];
 
-            // Split values inside the text field
-            splitWeights = tempWeights.split(" ");
-            splitValues = tempValues.split(" ");
+                // Split values inside the text field
+                splitWeights = tempWeights.split(" ");
+                splitValues = tempValues.split(" ");
 
-            // Store values inside the weights array
-            for(i = 0;i < items;i++)
+                for(k = 0;k < items;k++)
+                {
+                    if(Integer.parseInt(splitWeights[k]) <= 0 || Integer.parseInt(splitValues[k]) <= 0)
+                    {
+                        ErrorWindow w = new ErrorWindow(-1);
+                    }
+                }
+
+                // Store values inside the weights array
+                for (i = 0; i < items; i++) {
+                    weights[i] = Integer.parseInt(splitWeights[i]);
+                }
+
+                // Store values inside the values array
+                for (j = 0; j < items; j++) {
+                    values[j] = Integer.parseInt(splitValues[j]);
+                }
+            }catch (ArrayIndexOutOfBoundsException ae)
             {
-                weights[i] = Integer.parseInt(splitWeights[i]);
+                    ErrorWindow indexError = new ErrorWindow(2);
+            }catch (NumberFormatException in)
+            {
+                    ErrorWindow inputError = new ErrorWindow(1);
             }
 
-            // Store values inside the values array
-            for(j = 0;j < items;j++)
-            {
-                values[j] = Integer.parseInt(splitValues[j]);
-            }
-            System.out.println(weights[0] + " " + values[0]);
-
-            InputTable table = new InputTable(weights,values);
         }
 
+    }
+
+    // Method to display user's max weight
+    public void displayMaxWeight(String w)
+    {
+        // Display user's max weight
+        labelBag = new JLabel(w);
+        gbc.weightx = 30;
+        gbc.weighty = 30;
+        panel.add(labelBag,gbc);
     }
 
 }
