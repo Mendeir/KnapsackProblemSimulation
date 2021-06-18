@@ -5,26 +5,27 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InputTable extends JFrame{
+public class DisplayTable extends JFrame{
 
     //Instantiate table object
     JTable table;
 
     // Constructor
-    public InputTable(int [] dataWeights, int [] dataValues)
+    public DisplayTable(String [][] dataset)
     {
         setLayout(new FlowLayout());
 
         // Titles for columns
         String [] names = {"Subset" , "Total Weight", "Total Value"};
-        String [][]dataSet;
 
-        //table = new JTable(dataSet,names);
-        table.setPreferredScrollableViewportSize(new Dimension(500,50));
+
+        table = new JTable(dataset,names);
+        table.setPreferredScrollableViewportSize(new Dimension(500,500));
         table.setFillsViewportHeight(true);
 
         JScrollPane pane = new JScrollPane(table);
         add(pane);
+
     }
 
 }

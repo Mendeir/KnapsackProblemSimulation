@@ -21,6 +21,7 @@ public class InputWindow extends JFrame implements ActionListener{
     String tempValues;
     String splitWeights [];
     String splitValues [];
+    String displayResults [][];
 
     //Instantiate GUI objects
     JFrame frame = new JFrame("Knapsack Problem");
@@ -29,7 +30,6 @@ public class InputWindow extends JFrame implements ActionListener{
     JLabel labelMaxWeight = new JLabel("Maximum Weight:");
     JLabel labelWeight = new JLabel("Weights:");
     JLabel labelValues = new JLabel("Values:");
-    JLabel labelBag;
     JTextField itemNum = new JTextField();
     JTextField itemMaxWeight = new JTextField();
     JTextField itemWeights = new JTextField();
@@ -39,10 +39,8 @@ public class InputWindow extends JFrame implements ActionListener{
     GridBagConstraints gbc = new GridBagConstraints();
     ImageIcon napSack;
 
-
     // Constructor
-    InputWindow()
-    {
+    InputWindow() {
         // frame design and measurement
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(400,100,800,600);
@@ -95,6 +93,7 @@ public class InputWindow extends JFrame implements ActionListener{
                 // Array size
                 values = new int[items];
                 weights = new int[items];
+                displayResults = new String[15][3];
 
                 // Split values inside the text field
                 splitWeights = tempWeights.split(" ");
@@ -124,19 +123,55 @@ public class InputWindow extends JFrame implements ActionListener{
             {
                     ErrorWindow inputError = new ErrorWindow(1);
             }
+            knapSack(items,weights,values,maxWeight,items);
+            DisplayTable display = new DisplayTable(displayResults);
+
+            display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            display.setSize(600,500);
+            display.setVisible(true);
 
         }
 
     }
 
-    // Method to display user's max weight
-    public void displayMaxWeight(String w)
-    {
-        // Display user's max weight
-        labelBag = new JLabel(w);
-        gbc.weightx = 30;
-        gbc.weighty = 30;
-        panel.add(labelBag,gbc);
-    }
+    // Method to display user's values
+    public void knapSack(int n, int[] wt, int[] val, int m, int length) {
+        int optimalValue = 0;
+        String optimalValueString;
 
+        for (int counter = 0; counter < (1<<n); ++counter) {
+            int totalWeight = 0;
+            int totalValue = 0;
+            String totalWeightString;
+            String totalValueString;
+            String subsets = " ";
+
+            for (int counter2 = 0; counter2 < n; ++counter2) {
+                if((counter & (1<<counter2)) > 0) {
+                    totalWeight += wt[counter2];
+                    totalValue += val[counter2];
+                    subsets += String.valueOf(counter2 + 1 + " ");
+                    displayResults[counter-1][0] = subsets;
+                }
+            }
+
+            if (counter != 0) {
+                totalWeightString = String.valueOf(totalWeight);
+                totalValueString = String.valueOf(totalValue);
+                if(totalWeight > m)
+                    totalValueString = "not feasible";
+                displayResults[counter-1][1] = totalWeightString;
+                displayResults[counter-1][2] = totalValueString;
+            }
+
+            if(totalWeight <= m && optimalValue < totalValue) {
+                optimalValue = totalValue;
+                optimalValueString = String.valueOf(totalValue);
+            }
+        }
+
+    }
 }
+
+
+
