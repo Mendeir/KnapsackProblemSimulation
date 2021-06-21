@@ -103,12 +103,17 @@ public class InputWindow extends JFrame implements ActionListener{
 
         // Action for apply button
         if (e.getSource() == apply) {
+
             try {
                 // Get user's input for size and maximum weight
                 items = Integer.parseInt(itemNum.getText());
                 maxWeight = Integer.parseInt(itemMaxWeight.getText());
                 values = new int[items];
                 weights = new int[items];
+
+                if(items <= 0 || maxWeight <= 0){
+                    ErrorWindow error = new ErrorWindow(-1);
+                }
             }catch (NumberFormatException inn){
                 ErrorWindow error = new ErrorWindow(1);
             }
