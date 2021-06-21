@@ -5,6 +5,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 public class ErrorWindow extends JFrame{
 
     // Instantiate Objects for GUI
@@ -14,19 +15,20 @@ public class ErrorWindow extends JFrame{
     JLabel labelIndex = new JLabel("Error, Please enter exact values of your size");
     JFrame zeroNegative = new JFrame();
     JLabel zeroLabel = new JLabel("Error, Please Input positive numbers");
+    JFrame sizeNull = new JFrame();
+    JLabel labelNull = new JLabel("Error, Please input a size and a max weight values");
 
     // Constructor
     ErrorWindow(int flag)
     {
-        if(flag == 1)
-        {
+        if(flag == 1) {
             InputError();
-        }else if(flag == 2)
-        {
+        }else if(flag == 2) {
             IndexError();
-        }else if(flag == -1)
-        {
+        }else if(flag == -1) {
             ZeroNegative();
+        }else if(flag == 0){
+            nullSize();
         }
     }
 
@@ -62,5 +64,13 @@ public class ErrorWindow extends JFrame{
         zeroNegative.add(zeroLabel);
         zeroNegative.setVisible(true);
 
+    }
+    public void nullSize(){
+        sizeNull.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        sizeNull.setBounds(500,300,400,100);
+        labelNull.setSize(50,40);
+        labelNull.setHorizontalAlignment((int)JFrame.CENTER_ALIGNMENT);
+        sizeNull.add(labelNull);
+        sizeNull.setVisible(true);
     }
 }
