@@ -20,7 +20,7 @@ public class DisplayTable extends JFrame{
 
 
         table = new JTable(dataset,names);
-        table.setPreferredScrollableViewportSize(new Dimension(500,500));
+        table.setPreferredScrollableViewportSize(new Dimension(500,300));
         table.setFillsViewportHeight(true);
 
         JScrollPane pane = new JScrollPane(table);
