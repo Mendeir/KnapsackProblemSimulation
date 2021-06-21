@@ -18,6 +18,7 @@ public class InputWindow extends JFrame implements ActionListener{
     int k;
     int maxWeight = 0;
     boolean temp = false;
+    boolean app = false;
     String tempWeights;
     String tempValues;
     String splitWeights [];
@@ -29,7 +30,6 @@ public class InputWindow extends JFrame implements ActionListener{
     JFrame frame = new JFrame("Knapsack Problem");
     JPanel panel = new JPanel();
     JPanel panelTwo = new JPanel();
-    JPanel panelInput = new JPanel();
     JLabel labelItems = new JLabel("Number of Items:");
     JLabel labelMaxWeight = new JLabel("Maximum Weight:");
     JLabel labelWeight = new JLabel("Weights:");
@@ -103,7 +103,7 @@ public class InputWindow extends JFrame implements ActionListener{
 
         // Action for apply button
         if (e.getSource() == apply) {
-
+            app = true;
             try {
                 // Get user's input for size and maximum weight
                 items = Integer.parseInt(itemNum.getText());
@@ -131,44 +131,47 @@ public class InputWindow extends JFrame implements ActionListener{
 
         // Action for solve button
         if (e.getSource() == solve) {
+            if (app == false) {
+                ErrorWindow error = new ErrorWindow(0);
+            }else{
 
             try {
 
-            // Get users weights and values for conversion
-            tempWeights = itemWeights.getText();
-            tempValues = itemValues.getText();
+                // Get users weights and values for conversion
+                tempWeights = itemWeights.getText();
+                tempValues = itemValues.getText();
 
-            // Array size
-            displayResults = new String[15][3];
+                // Array size
+                displayResults = new String[15][3];
 
-            // Split values inside the text field
-            splitWeights = tempWeights.split(" ");
-            splitValues = tempValues.split(" ");
+                // Split values inside the text field
+                splitWeights = tempWeights.split(" ");
+                splitValues = tempValues.split(" ");
 
-            // Checking of negative and zero value for each values input by the user
-            for (k = 0; k < items; k++) {
-                if (Integer.parseInt(splitWeights[k]) <= 0 || Integer.parseInt(splitValues[k]) <= 0) {
-                    ErrorWindow w = new ErrorWindow(-1);
+                // Checking of negative and zero value for each values input by the user
+                for (k = 0; k < items; k++) {
+                    if (Integer.parseInt(splitWeights[k]) <= 0 || Integer.parseInt(splitValues[k]) <= 0) {
+                        ErrorWindow w = new ErrorWindow(-1);
+                    }
                 }
-            }
 
-            // Store values inside the weights array
-            for (i = 0; i < items; i++) {
-                weights[i] = Integer.parseInt(splitWeights[i]);
-            }
+                // Store values inside the weights array
+                for (i = 0; i < items; i++) {
+                    weights[i] = Integer.parseInt(splitWeights[i]);
+                }
 
-            // Store values inside the values array
-            for (j = 0; j < items; j++) {
-                values[j] = Integer.parseInt(splitValues[j]);
-            }
+                // Store values inside the values array
+                for (j = 0; j < items; j++) {
+                    values[j] = Integer.parseInt(splitValues[j]);
+                }
 
 
-            }catch (ArrayIndexOutOfBoundsException ae) {
-                    ErrorWindow indexError = new ErrorWindow(2);
-            }catch (NumberFormatException in) {
-                   if(temp == false){
-                       ErrorWindow inputError = new ErrorWindow(1);
-                   }
+            } catch (ArrayIndexOutOfBoundsException ae) {
+                ErrorWindow indexError = new ErrorWindow(2);
+            } catch (NumberFormatException in) {
+                if (temp == false) {
+                    ErrorWindow inputError = new ErrorWindow(1);
+                }
             }
 
             // Calling the method for knapsack algorithm
@@ -176,7 +179,7 @@ public class InputWindow extends JFrame implements ActionListener{
 
             // Calling the method for the display result
             displayTable(displayResults, names);
-
+            }
         }
 
     }
